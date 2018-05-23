@@ -73,3 +73,7 @@ Find only unique visitors:
 The `AnalyzerComponent` allows you to get insights in your traffic. The following methods are available:
 
 > There are no methods yet, they will probably be replaced by the Table's finders.
+
+## Credits
+
+This work is based on the [code by CakeManager](https://github.com/cakemanager/cakephp-analyzer).

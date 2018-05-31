@@ -13,20 +13,15 @@
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
-use Cake\Routing\DispatcherFactory;
+use Analyzer\Routing\Middleware\AnalyzerMiddleware;
 use Cake\Core\Configure;
+use Cake\Event\EventManager;
 
-DispatcherFactory::add('Analyzer.Analyzer');
+EventManager::instance()->on('Server.buildMiddleware',
+    function ($event, $middlewareQueue) {
+        $middlewareQueue->add(new AnalyzerMiddleware());
+    });
 
 Configure::write('Analyzer.Ignore.default', [
     'plugin' => 'DebugKit',
-]);
-
-Configure::write('CA.Menu.main.Analyzer', [
-    'url' => [
-        'prefix' => 'admin',
-        'controller' => 'Analyzer',
-        'plugin' => 'Analyzer'
-    ],
-    'weight' => 40
 ]);

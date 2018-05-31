@@ -12,9 +12,12 @@
  * @since         1.0
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
+
 namespace Analyzer\Model\Table;
 
 use Analyzer\Model\Entity\Request;
+use Cake\Datasource\EntityInterface;
+use Cake\ORM\Association\BelongsTo;
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
@@ -24,7 +27,17 @@ use DateTime;
 /**
  * Requests Model
  *
- * @property \Cake\ORM\Association\BelongsTo $Visitors
+ * @property BelongsTo $Visitors
+ *
+ * @method Request get($primaryKey, $options = [])
+ * @method Request newEntity($data = null, array $options = [])
+ * @method Request[] newEntities(array $data, array $options = [])
+ * @method Request|bool save(EntityInterface $entity, $options = [])
+ * @method Request patchEntity(EntityInterface $entity, array $data, array $options = [])
+ * @method Request[] patchEntities($entities, array $data, array $options = [])
+ * @method Request findOrCreate($search, callable $callback = null, $options = [])
+ *
+ * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */
 class RequestsTable extends Table
 {
@@ -33,15 +46,16 @@ class RequestsTable extends Table
      * Initialize method
      *
      * @param array $config The configuration for the Table.
+     *
      * @return void
      */
     public function initialize(array $config)
     {
         parent::initialize($config);
 
-        $this->table('analyzer_requests');
-        $this->displayField('id');
-        $this->primaryKey('id');
+        $this->setTable('analyzer_requests');
+        $this->setDisplayField('id');
+        $this->setPrimaryKey('id');
 
         $this->addBehavior('Timestamp');
 
@@ -54,18 +68,19 @@ class RequestsTable extends Table
     public function findUniqueVisitors(Query $query, array $options)
     {
         $query->group('Requests.visitor_id');
+
         return $query;
     }
 
     public function findBetween(Query $query, array $options)
     {
-        if(array_key_exists('start', $options)) {
+        if (array_key_exists('start', $options)) {
             $query->where([
                 'Requests.created <=' => new DateTime($options['start'])
             ]);
         }
 
-        if(array_key_exists('end', $options)) {
+        if (array_key_exists('end', $options)) {
             $query->where([
                 'Requests.created >=' => new DateTime($options['end'])
             ]);
@@ -78,6 +93,7 @@ class RequestsTable extends Table
      * Default validation rules.
      *
      * @param \Cake\Validation\Validator $validator Validator instance.
+     *
      * @return \Cake\Validation\Validator
      */
     public function validationDefault(Validator $validator)
@@ -118,11 +134,13 @@ class RequestsTable extends Table
      * application integrity.
      *
      * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
+     *
      * @return \Cake\ORM\RulesChecker
      */
     public function buildRules(RulesChecker $rules)
     {
         $rules->add($rules->existsIn(['visitor_id'], 'Visitors'));
+
         return $rules;
     }
 }

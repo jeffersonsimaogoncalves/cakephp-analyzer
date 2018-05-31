@@ -12,11 +12,11 @@
  * @since         1.0
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
+
 namespace Analyzer\Model\Table;
 
 use Analyzer\Model\Entity\Visitor;
-use Cake\ORM\Query;
-use Cake\ORM\RulesChecker;
+use Cake\Datasource\EntityInterface;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
@@ -24,6 +24,16 @@ use Cake\Validation\Validator;
  * Visitors Model
  *
  * @property \Cake\ORM\Association\HasMany $Requests
+ *
+ * @method Visitor get($primaryKey, $options = [])
+ * @method Visitor newEntity($data = null, array $options = [])
+ * @method Visitor[] newEntities(array $data, array $options = [])
+ * @method Visitor|bool save(EntityInterface $entity, $options = [])
+ * @method Visitor patchEntity(EntityInterface $entity, array $data, array $options = [])
+ * @method Visitor[] patchEntities($entities, array $data, array $options = [])
+ * @method Visitor findOrCreate($search, callable $callback = null, $options = [])
+ *
+ * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */
 class VisitorsTable extends Table
 {
@@ -32,15 +42,16 @@ class VisitorsTable extends Table
      * Initialize method
      *
      * @param array $config The configuration for the Table.
+     *
      * @return void
      */
     public function initialize(array $config)
     {
         parent::initialize($config);
 
-        $this->table('analyzer_visitors');
-        $this->displayField('id');
-        $this->primaryKey('id');
+        $this->setTable('analyzer_visitors');
+        $this->setDisplayField('id');
+        $this->setPrimaryKey('id');
 
         $this->addBehavior('Timestamp');
 
@@ -54,6 +65,7 @@ class VisitorsTable extends Table
      * Default validation rules.
      *
      * @param \Cake\Validation\Validator $validator Validator instance.
+     *
      * @return \Cake\Validation\Validator
      */
     public function validationDefault(Validator $validator)

@@ -78,7 +78,7 @@ class AnalyzerMiddleware
             'ext' => $this->request->getParam('ext'),
             'prefix' => $this->request->getParam('prefix'),
             'pass' => $this->request->getParam('pass'),
-            'query' => $this->request->getQueryParams(),
+            'query' => $this->request->getQuery(),
         ];
 
         $entity = $this->Requests->newEntity($data);

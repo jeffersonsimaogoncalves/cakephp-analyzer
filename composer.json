@@ -1,25 +1,25 @@
 {
-    "name": "cakemanager/cakephp-analyzer",
-    "description": "Analyzer plugin for CakePHP",
-    "type": "cakephp-plugin",
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "CakeManager",
-            "homepage": "http://cakemanager.org"
-        },
-        {
-            "name": "Jefferson Simão Gonçalves",
-            "homepage": "https://github.com/jeffersonsimaogoncalves"
-        }
-    ],
-    "require": {
-        "php": ">=7.0",
-        "cakephp/cakephp": "^3.6"
+  "name": "jeffersonsimaogoncalves/cakephp-analyzer",
+  "description": "Analyzer plugin for CakePHP",
+  "type": "cakephp-plugin",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "CakeManager",
+      "homepage": "http://cakemanager.org"
     },
-    "autoload": {
-        "psr-4": {
-            "Analyzer\\": "src"
-        }
+    {
+      "name": "Jefferson Simão Gonçalves",
+      "homepage": "https://github.com/jeffersonsimaogoncalves"
     }
+  ],
+  "require": {
+    "php": ">=7.0",
+    "cakephp/cakephp": "^3.6"
+  },
+  "autoload": {
+    "psr-4": {
+      "Analyzer\\": "src"
+    }
+  }
 }

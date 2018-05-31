@@ -9,7 +9,7 @@ You can install this plugin into your CakePHP application using [composer](http:
 The recommended way to install composer packages is:
 
 ```
-composer require cakemanager/cakephp-analyzer:dev-master
+composer require cakemanager/cakephp-analyzer
 ```
 
 Now load the plugin via your shell:
@@ -19,7 +19,7 @@ $ bin/cake plugin load -b -r Analyzer
 ```
 Or put the following in your `config/bootstrap.php`:
 ```
-Plugin::load('Analyzer', ['bootstrap' => true, 'routes' => true]);
+Plugin::load('Analyzer', ['bootstrap' => true]);
 
 ```
 
@@ -68,11 +68,6 @@ Find only unique visitors:
 ```
     $query->find('UniqueVisitors');
 ```
-
-### AnalyzerComponent
-The `AnalyzerComponent` allows you to get insights in your traffic. The following methods are available:
-
-> There are no methods yet, they will probably be replaced by the Table's finders.
 
 ## Credits
 

@@ -147,8 +147,7 @@ class AnalyzerMiddleware
         $exists = (bool)$query->count();
 
         if (!$exists) {
-            $entity = $this->Visitors->newEntity();
-            $entity->client_id = $clientIp;
+            $entity = $this->Visitors->newEntity(['client_ip' => $clientIp]);
             $this->Visitors->save($entity);
 
             return $entity;

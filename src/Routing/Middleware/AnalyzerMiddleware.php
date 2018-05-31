@@ -150,6 +150,8 @@ class AnalyzerMiddleware
             $entity = $this->Visitors->newEntity();
             $entity->client_id = $clientIp;
             $this->Visitors->save($entity);
+
+            return $entity;
         }
 
         return $query->first();

@@ -78,7 +78,7 @@ class AnalyzerMiddleware
             'ext' => $this->request->getParam('ext'),
             'prefix' => $this->request->getParam('prefix'),
             'pass' => $this->request->getParam('pass'),
-            'query' => $this->request->getQueryParams()
+            'query' => $this->request->getQueryParams(),
         ];
 
         $entity = $this->Requests->newEntity($data);
@@ -97,7 +97,7 @@ class AnalyzerMiddleware
             'plugin' => '*',
             'controller' => '*',
             'action' => '*',
-            'prefix' => '*'
+            'prefix' => '*',
         ];
 
         foreach ($list as $key => $rule) {
@@ -143,16 +143,13 @@ class AnalyzerMiddleware
     private function getVisitor()
     {
         $clientIp = $this->request->clientIp();
-        $query = $this->Visitors->find()->where(['Visitors.client_ip' => $clientIp]);
-        $exists = (bool)$query->count();
+        $visitor = $this->Visitors->find()->where(['Visitors.client_ip' => $clientIp])->first();
 
-        if (!$exists) {
-            $entity = $this->Visitors->newEntity(['client_ip' => $clientIp]);
-            $this->Visitors->save($entity);
-
-            return $entity;
+        if (is_null($visitor)) {
+            $visitor = $this->Visitors->newEntity(['client_ip' => $clientIp]);
+            $this->Visitors->save($visitor);
         }
 
-        return $query->first();
+        return $visitor;
     }
 }

@@ -11,6 +11,7 @@ namespace Analyzer\Routing\Middleware;
 
 use Analyzer\Model\Entity\Visitor;
 use Cake\Core\Configure;
+use Cake\Datasource\ConnectionManager;
 use Cake\ORM\TableRegistry;
 
 /**
@@ -23,23 +24,9 @@ use Cake\ORM\TableRegistry;
 class AnalyzerMiddleware
 {
     /**
-     * @var \Analyzer\Model\Table\VisitorsTable
-     */
-    private $Visitors;
-    /**
-     * @var \Analyzer\Model\Table\RequestsTable
-     */
-    private $Requests;
-    /**
      * @var \Cake\Http\ServerRequest
      */
     private $request;
-
-    public function __construct()
-    {
-        $this->Visitors = TableRegistry::getTableLocator()->get('Analyzer.Visitors');
-        $this->Requests = TableRegistry::getTableLocator()->get('Analyzer.Requests');
-    }
 
     /**
      * Serve assets if the path matches one.
@@ -52,11 +39,27 @@ class AnalyzerMiddleware
      */
     public function __invoke($request, $response, $next)
     {
-        $this->request = $request;
-
-        $this->registerRequest($this->getVisitor());
+        if ($this->_tableExists()) {
+            $this->request = $request;
+            $this->registerRequest($this->getVisitor());
+        }
 
         return $next($request, $response);
+    }
+
+    /**
+     * @return bool
+     */
+    protected function _tableExists()
+    {
+        $db = ConnectionManager::get('default');
+        $tables = $db->getSchemaCollection()->listTables();
+
+        if (in_array('analyzer_requests', $tables) && in_array('analyzer_visitors', $tables)) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -81,9 +84,11 @@ class AnalyzerMiddleware
             'query' => $this->request->getQuery(),
         ];
 
-        $entity = $this->Requests->newEntity($data);
+        /** @var \Analyzer\Model\Table\RequestsTable $Requests */
+        $Requests = TableRegistry::getTableLocator()->get('Analyzer.Requests');
+        $entity = $Requests->newEntity($data);
 
-        return $this->Requests->save($entity);
+        $Requests->save($entity);
     }
 
     /**
@@ -138,16 +143,19 @@ class AnalyzerMiddleware
     }
 
     /**
-     * @return \Analyzer\Model\Entity\Visitor|array|\Cake\Datasource\EntityInterface
+     * @return \Analyzer\Model\Entity\Visitor
      */
     private function getVisitor()
     {
         $clientIp = $this->request->clientIp();
-        $visitor = $this->Visitors->find()->where(['Visitors.client_ip' => $clientIp])->first();
+        /** @var \Analyzer\Model\Table\VisitorsTable $Visitors */
+        $Visitors = TableRegistry::getTableLocator()->get('Analyzer.Visitors');
+        /** @var \Analyzer\Model\Entity\Visitor $visitor */
+        $visitor = $Visitors->find()->where(['Visitors.client_ip' => $clientIp])->first();
 
         if (is_null($visitor)) {
-            $visitor = $this->Visitors->newEntity(['client_ip' => $clientIp]);
-            $this->Visitors->save($visitor);
+            $visitor = $Visitors->newEntity(['client_ip' => $clientIp]);
+            $Visitors->save($visitor);
         }
 
         return $visitor;

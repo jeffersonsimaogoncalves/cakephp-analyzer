@@ -31,9 +31,9 @@ class AnalyzerMiddleware
     /**
      * Serve assets if the path matches one.
      *
-     * @param \Psr\Http\Message\ServerRequestInterface $request  The request.
-     * @param \Psr\Http\Message\ResponseInterface      $response The response.
-     * @param callable                                 $next     Callback to invoke the next middleware.
+     * @param \Psr\Http\Message\ServerRequestInterface $request The request.
+     * @param \Psr\Http\Message\ResponseInterface $response The response.
+     * @param callable $next Callback to invoke the next middleware.
      *
      * @return \Psr\Http\Message\ResponseInterface A response
      */
@@ -52,14 +52,19 @@ class AnalyzerMiddleware
      */
     protected function _tableExists()
     {
-        $db = ConnectionManager::get('default');
-        $tables = $db->getSchemaCollection()->listTables();
+        try {
+            $db = ConnectionManager::get('default');
+            $tables = $db->getSchemaCollection()->listTables();
 
-        if (in_array('analyzer_requests', $tables) && in_array('analyzer_visitors', $tables)) {
-            return true;
+            if (in_array('analyzer_requests', $tables) && in_array('analyzer_visitors', $tables)) {
+                return true;
+            }
+
+            return false;
+        } catch (\Exception $connectionError) {
+            return false;
         }
 
-        return false;
     }
 
     /**

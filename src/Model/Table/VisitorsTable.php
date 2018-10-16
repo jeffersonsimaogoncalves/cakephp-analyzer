@@ -16,6 +16,7 @@
 namespace Analyzer\Model\Table;
 
 use Analyzer\Model\Entity\Visitor;
+use Cake\Core\Configure;
 use Cake\Datasource\EntityInterface;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
@@ -39,6 +40,21 @@ class VisitorsTable extends Table
 {
 
     /**
+     * set connection name
+     *
+     * @return string
+     */
+    public static function defaultConnectionName()
+    {
+        $connection = Configure::read('Analyzer.connection');
+        if (!empty($connection)) {
+            return $connection;
+        };
+
+        return parent::defaultConnectionName();
+    }
+
+    /**
      * Initialize method
      *
      * @param array $config The configuration for the Table.
@@ -57,7 +73,7 @@ class VisitorsTable extends Table
 
         $this->hasMany('Requests', [
             'foreignKey' => 'visitor_id',
-            'className' => 'Analyzer.Requests'
+            'className'  => 'Analyzer.Requests',
         ]);
     }
 

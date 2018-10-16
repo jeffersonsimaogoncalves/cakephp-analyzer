@@ -16,6 +16,7 @@
 namespace Analyzer\Model\Table;
 
 use Analyzer\Model\Entity\Request;
+use Cake\Core\Configure;
 use Cake\Datasource\EntityInterface;
 use Cake\ORM\Association\BelongsTo;
 use Cake\ORM\Query;
@@ -43,6 +44,21 @@ class RequestsTable extends Table
 {
 
     /**
+     * set connection name
+     *
+     * @return string
+     */
+    public static function defaultConnectionName()
+    {
+        $connection = Configure::read('Analyzer.connection');
+        if (!empty($connection)) {
+            return $connection;
+        };
+
+        return parent::defaultConnectionName();
+    }
+
+    /**
      * Initialize method
      *
      * @param array $config The configuration for the Table.
@@ -61,7 +77,7 @@ class RequestsTable extends Table
 
         $this->belongsTo('Visitors', [
             'foreignKey' => 'visitor_id',
-            'className' => 'Analyzer.Visitors'
+            'className'  => 'Analyzer.Visitors',
         ]);
     }
 
@@ -76,13 +92,13 @@ class RequestsTable extends Table
     {
         if (array_key_exists('start', $options)) {
             $query->where([
-                'Requests.created <=' => new DateTime($options['start'])
+                'Requests.created <=' => new DateTime($options['start']),
             ]);
         }
 
         if (array_key_exists('end', $options)) {
             $query->where([
-                'Requests.created >=' => new DateTime($options['end'])
+                'Requests.created >=' => new DateTime($options['end']),
             ]);
         }
 

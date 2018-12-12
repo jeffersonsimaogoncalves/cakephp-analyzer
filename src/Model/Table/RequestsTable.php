@@ -53,7 +53,7 @@ class RequestsTable extends Table
         $connection = Configure::read('Analyzer.connection');
         if (!empty($connection)) {
             return $connection;
-        };
+        }
 
         return parent::defaultConnectionName();
     }

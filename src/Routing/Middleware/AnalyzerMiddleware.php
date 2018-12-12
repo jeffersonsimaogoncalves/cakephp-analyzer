@@ -54,6 +54,12 @@ class AnalyzerMiddleware
     {
         try {
             $db = ConnectionManager::get('default');
+            $connection = Configure::read('Analyzer.connection');
+            
+            if (!empty($connection)) {
+                $db = ConnectionManager::get($connection);
+            }
+
             $tables = $db->getSchemaCollection()->listTables();
 
             if (in_array('analyzer_requests', $tables) && in_array('analyzer_visitors', $tables)) {
@@ -79,14 +85,14 @@ class AnalyzerMiddleware
         }
         $data = [
             'visitor_id' => $visitor->get('id'),
-            'url' => $this->request->getRequestTarget(),
-            'plugin' => $this->request->getParam('plugin'),
+            'url'        => $this->request->getRequestTarget(),
+            'plugin'     => $this->request->getParam('plugin'),
             'controller' => $this->request->getParam('controller'),
-            'action' => $this->request->getParam('action'),
-            'ext' => $this->request->getParam('ext'),
-            'prefix' => $this->request->getParam('prefix'),
-            'pass' => $this->request->getParam('pass'),
-            'query' => $this->request->getQuery(),
+            'action'     => $this->request->getParam('action'),
+            'ext'        => $this->request->getParam('ext'),
+            'prefix'     => $this->request->getParam('prefix'),
+            'pass'       => $this->request->getParam('pass'),
+            'query'      => $this->request->getQuery(),
         ];
 
         /** @var \Analyzer\Model\Table\RequestsTable $Requests */
@@ -104,10 +110,10 @@ class AnalyzerMiddleware
         $list = Configure::read('Analyzer.Ignore');
 
         $_rule = [
-            'plugin' => '*',
+            'plugin'     => '*',
             'controller' => '*',
-            'action' => '*',
-            'prefix' => '*',
+            'action'     => '*',
+            'prefix'     => '*',
         ];
 
         foreach ($list as $key => $rule) {

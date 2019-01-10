@@ -14,7 +14,7 @@
  */
 use Migrations\AbstractMigration;
 
-class Initial extends AbstractMigration
+class InitialAnalyzer extends AbstractMigration
 {
     public function up()
     {

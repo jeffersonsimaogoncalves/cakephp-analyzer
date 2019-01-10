@@ -55,7 +55,7 @@ class AnalyzerMiddleware
         try {
             $db = ConnectionManager::get('default');
             $connection = Configure::read('Analyzer.connection');
-            
+
             if (!empty($connection)) {
                 $db = ConnectionManager::get($connection);
             }

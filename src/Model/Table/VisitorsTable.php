@@ -44,7 +44,7 @@ class VisitorsTable extends Table
      *
      * @return string
      */
-    public static function defaultConnectionName()
+    public static function defaultConnectionName(): string
     {
         $connection = Configure::read('Analyzer.connection');
         if (!empty($connection)) {
@@ -57,11 +57,11 @@ class VisitorsTable extends Table
     /**
      * Initialize method
      *
-     * @param array $config The configuration for the Table.
+     * @param  array  $config  The configuration for the Table.
      *
      * @return void
      */
-    public function initialize(array $config)
+    public function initialize(array $config): void
     {
         parent::initialize($config);
 
@@ -73,14 +73,14 @@ class VisitorsTable extends Table
 
         $this->hasMany('Requests', [
             'foreignKey' => 'visitor_id',
-            'className'  => 'Analyzer.Requests',
+            'className' => 'Analyzer.Requests',
         ]);
     }
 
     /**
      * Default validation rules.
      *
-     * @param \Cake\Validation\Validator $validator Validator instance.
+     * @param  \Cake\Validation\Validator  $validator  Validator instance.
      *
      * @return \Cake\Validation\Validator
      */
@@ -88,10 +88,10 @@ class VisitorsTable extends Table
     {
         $validator
             ->add('id', 'valid', ['rule' => 'numeric'])
-            ->allowEmpty('id', 'create');
+            ->allowEmptyString('id');
 
         $validator
-            ->allowEmpty('client_ip');
+            ->allowEmptyString('client_ip');
 
         return $validator;
     }

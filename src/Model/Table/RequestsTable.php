@@ -48,7 +48,7 @@ class RequestsTable extends Table
      *
      * @return string
      */
-    public static function defaultConnectionName()
+    public static function defaultConnectionName(): string
     {
         $connection = Configure::read('Analyzer.connection');
         if (!empty($connection)) {
@@ -61,11 +61,11 @@ class RequestsTable extends Table
     /**
      * Initialize method
      *
-     * @param array $config The configuration for the Table.
+     * @param  array  $config  The configuration for the Table.
      *
      * @return void
      */
-    public function initialize(array $config)
+    public function initialize(array $config): void
     {
         parent::initialize($config);
 
@@ -77,7 +77,7 @@ class RequestsTable extends Table
 
         $this->belongsTo('Visitors', [
             'foreignKey' => 'visitor_id',
-            'className'  => 'Analyzer.Visitors',
+            'className' => 'Analyzer.Visitors',
         ]);
     }
 
@@ -108,7 +108,7 @@ class RequestsTable extends Table
     /**
      * Default validation rules.
      *
-     * @param \Cake\Validation\Validator $validator Validator instance.
+     * @param  \Cake\Validation\Validator  $validator  Validator instance.
      *
      * @return \Cake\Validation\Validator
      */
@@ -116,31 +116,31 @@ class RequestsTable extends Table
     {
         $validator
             ->add('id', 'valid', ['rule' => 'numeric'])
-            ->allowEmpty('id', 'create');
+            ->allowEmptyString('id');
 
         $validator
-            ->allowEmpty('url');
+            ->allowEmptyString('url');
 
         $validator
-            ->allowEmpty('plugin');
+            ->allowEmptyString('plugin');
 
         $validator
-            ->allowEmpty('controller');
+            ->allowEmptyString('controller');
 
         $validator
-            ->allowEmpty('action');
+            ->allowEmptyString('action');
 
         $validator
-            ->allowEmpty('ext');
+            ->allowEmptyString('ext');
 
         $validator
-            ->allowEmpty('prefix');
+            ->allowEmptyString('prefix');
 
         $validator
-            ->allowEmpty('pass');
+            ->allowEmptyString('pass');
 
         $validator
-            ->allowEmpty('query');
+            ->allowEmptyString('query');
 
         return $validator;
     }
@@ -149,11 +149,11 @@ class RequestsTable extends Table
      * Returns a rules checker object that will be used for validating
      * application integrity.
      *
-     * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
+     * @param  \Cake\ORM\RulesChecker  $rules  The rules object to be modified.
      *
      * @return \Cake\ORM\RulesChecker
      */
-    public function buildRules(RulesChecker $rules)
+    public function buildRules(RulesChecker $rules): RulesChecker
     {
         $rules->add($rules->existsIn(['visitor_id'], 'Visitors'));
 
